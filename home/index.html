@@ -15,14 +15,13 @@
         </a>
     </div>
     
-    <nav class="navbar">
-        <a href="index.html">Home</a>
-        <a href="../clinics/clinics.html">Clinics</a>
-        <a href="../about/about.html">About Us</a>
-
-        <div id="auth-container" style="display: inline-flex; align-items: center;">
-            <a href="../registration/registration.html" class="nav-button">Log In / Register</a>
-        </div>
+    <nav>
+        <ul>
+            <li><a href="../registration/registration.html">Login</a></li>
+            <li><a href="../clinics/clinics.html">Clinics</a></li>
+            <li><a href="../appointment/appointment.html">Appointment</a></li>
+            <li><a href="../about/about.html">About Us</a></li>
+        </ul>
     </nav>
 </header>
     
@@ -93,31 +92,6 @@
     </div>
 </footer>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const signOutBtn = document.getElementById('signOutBtn');
-            const accountBtn = document.getElementById('accountBtn');
-
-            // Handle Sign Out Confirmation
-            if (signOutBtn) {
-                signOutBtn.addEventListener('click', function(e) {
-                    e.preventDefault(); // Prevents page jump
-                    if (confirm("Are you sure you want to sign out?")) {
-                        window.location.href = '../registration/logout.php';
-                    }
-                });
-            }
-
-            // Handle Account Dialog
-            if (accountBtn) {
-                accountBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    alert("Account Details Dialog placeholder.\n\nIn the future, this will open the HTML dialog for the patient's profile.");
-                });
-            }
-        });
-    </script>
-    </body>
-</html>
+    
 </body>
 </html>
