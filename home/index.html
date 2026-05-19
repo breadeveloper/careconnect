@@ -16,18 +16,14 @@
     </div>
     
     <nav class="navbar">
-        <a href="index.php">Home</a> <a href="../clinics/clinics.html">Clinics</a>
+        <a href="index.html">Home</a>
+        <a href="../clinics/clinics.html">Clinics</a>
         <a href="../about/about.html">About Us</a>
 
-        <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'patient'): ?>
-            <a href="#" id="accountBtn" class="nav-icon">
-                <img src="account.png" alt="Account" style="height: 30px; width: 30px; margin-left: 15px; vertical-align: middle;">
-            </a>
-            <a href="#" id="signOutBtn" class="nav-button">Sign Out</a>
-        <?php else: ?>
+        <div id="auth-container" style="display: inline-flex; align-items: center;">
             <a href="../registration/registration.html" class="nav-button">Log In / Register</a>
-        <?php endif; ?>
-        </nav>
+        </div>
+    </nav>
 </header>
     
     

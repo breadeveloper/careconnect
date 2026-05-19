@@ -8,6 +8,6 @@ $_SESSION = array();
 session_destroy();
 
 // Send them back to the newly reverted homepage
-header("Location: ../home/index.php");
+header("Location: ../home/index.html");
 exit();
 ?>
