@@ -1,92 +1,60 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const previewBtn = document.getElementById("previewBtn");
-    const confirmBtn = document.getElementById("confirmBtn");
-    const form = document.getElementById("appointmentForm");
-    const summaryDiv = document.getElementById("summary");
-
-    // Hide confirm button by default
-    confirmBtn.style.display = "none";
-
-    previewBtn.addEventListener("click", function () {
-        // Check if all required fields are filled
-        const requiredFields = form.querySelectorAll("[required]");
-        let allFilled = true;
-
-        requiredFields.forEach(field => {
-            if (!field.value.trim()) {
-                allFilled = false;
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // --- 1. INITIALIZE FULLCALENDAR ---
+    const calendarEl = document.getElementById('calendar');
+    
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth', // Default view is the full month
+        height: '100%', // Bound to the CSS max-height
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek' // Allow toggling between month and week views
+        },
+        // We will replace this with a PHP fetch later! Just mocking some data to see how it looks.
+        events: [
+            {
+                title: 'Dental Checkup - SmileMakers',
+                start: '2026-05-22T10:00:00',
+                backgroundColor: '#007bff', // Blue for confirmed
+                borderColor: '#007bff'
+            },
+            {
+                title: 'Pending: ENT Consultation',
+                start: '2026-05-25T14:30:00',
+                backgroundColor: '#ffc107', // Yellow for pending
+                borderColor: '#e0a800',
+                textColor: '#000'
             }
-        });
-
-        if (!allFilled) {
-            alert("Please fill out all required fields before previewing.");
-            return;
+        ],
+        // Interactive Two-Way Binding placeholder
+        eventClick: function(info) {
+            alert('You clicked on appointment: ' + info.event.title + '\n\nLater, this will highlight the exact row in the table below!');
         }
+    });
+    
+    calendar.render();
 
-        // Populate summary section
-        document.getElementById("summaryname").textContent = document.getElementById("name").value;
-        document.getElementById("summarycontact").textContent = document.getElementById("contact").value;
-        document.getElementById("summarydatebirth").textContent = document.getElementById("datebirth").value;
-        document.getElementById("summarygender").textContent = document.getElementById("gender").value;
-        document.getElementById("summarymedical").textContent = document.getElementById("medical").value;
-        document.getElementById("summarypreferdate").textContent = document.getElementById("preferdate").value;
-        document.getElementById("summaryprefertime").textContent = document.getElementById("prefertime").value;
-        document.getElementById("summarytype").textContent = document.getElementById("type").value;
-        document.getElementById("summaryreason").textContent = document.getElementById("reason").value;
+    // --- 2. MODAL LOGIC ---
+    const modal = document.getElementById('booking-modal');
+    const newApptBtn = document.getElementById('new-appointment-btn');
+    const closeBtn = document.querySelector('.close-modal');
 
-        // Show summary & confirm button
-        summaryDiv.style.display = "block";
-        confirmBtn.style.display = "inline-block";
+    // Open Modal
+    newApptBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
     });
 
-    // Handle final submission
-    form.addEventListener("confirmBtn", function (event) {
-        event.preventDefault();
-        alert("Appointment booked successfully!");
-
-        // Reset the form & hide summary + confirm button
-        form.reset();
-        summaryDiv.style.display = "none";
-        confirmBtn.style.display = "none";
+    // Close Modal via X button
+    closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
     });
+
+    // Close Modal by clicking the dark background outside it
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+
 });
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const appointmentForm = document.getElementById("appointmentForm"); // Use ID for accuracy
-
-    appointmentForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent page reload
-
-        const formData = {
-            name: document.getElementById("name").value.trim(),
-            contact: document.getElementById("contact").value.trim(),
-            dateOfBirth: document.getElementById("datebirth").value,
-            gender: document.getElementById("gender").value,
-            medicalHistory: document.getElementById("medical").value.trim(),
-            preferredDate: document.getElementById("preferdate").value,
-            preferredTime: document.getElementById("prefertime").value,
-            appointmentType: document.getElementById("type").value,
-            reason: document.getElementById("reason").value.trim()
-        };
-
-        console.log("Submitting appointment:", formData); 
-
-        fetch("https://script.google.com/macros/s/AKfycbzvPdQIuaJnaKDocnNqaQk4v2HCOefMMfFXXkqN-kG2h85aqbWSGkUp8Nfrq2DATdzNUw/exec", {  
-            method: "POST",
-            mode: "no-cors", 
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData)
-        })
-        .then(() => {
-            alert("Appointment booked successfully!"); 
-            appointmentForm.reset(); 
-        })
-        .catch(error => {
-            console.error("Fetch error:", error);
-            alert("Failed to book appointment. Please try again.");
-        });
-    });
-});
-

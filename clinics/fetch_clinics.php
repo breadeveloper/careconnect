@@ -4,8 +4,8 @@ require '../registration/db_connect.php';
 header('Content-Type: application/json');
 
 $clinics = [];
-// 1. Fetch the main clinic profile
-$query = "SELECT clinic_id, clinic_name, clinic_contact, barangay, street FROM clinics";
+// Update this line inside fetch_clinics.php to grab the coordinates!
+$query = "SELECT clinic_id, clinic_name, clinic_contact, barangay, street, latitude, longitude FROM clinics";
 $result = $conn->query($query);
 
 if ($result->num_rows > 0) {

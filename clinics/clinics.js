@@ -3,17 +3,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterSpecialty = document.getElementById('filter-specialty');
     const filterStatus = document.getElementById('filter-status');
 
+    // --- 1. INITIALIZE THE LEAFLET MAP ---
+    // Centered exactly on Daet, Camarines Norte
+    const map = L.map('clinic-map').setView([14.1153, 122.9546], 15);
+    
+    // Load the OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Keep track of markers so we can filter them later if needed
+    const markers = [];
+
+    // --- Helper: Highlight Card when Pin is Clicked ---
+    function highlightCard(cardElement) {
+        // Scroll down to the specific clinic card smoothly
+        cardElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Add a temporary blue glow to catch the user's eye
+        cardElement.style.transition = 'all 0.3s ease';
+        cardElement.style.boxShadow = '0 0 20px rgba(0, 123, 255, 0.6)';
+        cardElement.style.transform = 'scale(1.02)';
+        
+        // Remove the glow after 2 seconds
+        setTimeout(() => {
+            cardElement.style.boxShadow = '0px 4px 10px rgba(0, 0, 0, 0.1)';
+            cardElement.style.transform = 'none';
+        }, 2000);
+    }
+
     function formatTagName(str) {
         return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
 
-    // --- 1. THE SMART TAG RENDERER (CONTEXT SWAP) ---
     function updateTagsForCard(card, activeFilter) {
         const tagsContainer = card.querySelector('.card-tags');
         if (!tagsContainer) return;
 
         const statusTag = tagsContainer.querySelector('.status-open, .status-closed');
-        
         let rawSpecs = card.getAttribute('data-specialties') || card.getAttribute('data-specialty') || 'General';
         let specialties = rawSpecs.split(',').map(s => s.trim().toLowerCase()).filter(s => s !== '');
 
@@ -37,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tagsContainer.innerHTML = newTagsHTML;
     }
 
-    // --- 2. FILTER & SEARCH LOGIC ---
     function filterClinics() {
         const clinicCards = document.querySelectorAll('.clinic-card'); 
         const searchTerm = searchInput.value.toLowerCase();
@@ -69,13 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
     filterSpecialty.addEventListener('change', filterClinics);
     filterStatus.addEventListener('change', filterClinics);
 
-    // --- 3. DATABASE FETCH & RENDER LOGIC ---
     function loadRealClinics() {
         fetch('fetch_clinics.php')
             .then(response => response.json())
             .then(realClinics => {
                 
-                // DYNAMIC DROPDOWN GENERATOR
                 const uniqueSpecialties = new Set([
                     'general practice', 'pediatrics', 'dental', 'ob-gyn', 'optometry'
                 ]);
@@ -97,9 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     filterSpecialty.appendChild(option);
                 });
 
-                const firstCard = document.querySelector('.clinic-card');
-                if (!firstCard) return;
-                const container = firstCard.parentElement;
+                const container = document.getElementById('clinics-grid');
+                if (!container) return;
 
                 realClinics.forEach(dbClinic => {
                     const card = document.createElement('div');
@@ -122,38 +145,74 @@ document.addEventListener('DOMContentLoaded', () => {
                         formattedContact = '+63 ' + cleanContact.substring(1);
                     }
 
-                    // Notice the <a> tag wrapping the card-header, and your updated call.png!
+                    const wazeDeepLink = (dbClinic.latitude && dbClinic.longitude) 
+                        ? `https://waze.com/ul?ll=${dbClinic.latitude},${dbClinic.longitude}&navigate=yes`
+                        : `https://waze.com/ul?q=${encodeURIComponent(locationText)}&navigate=yes`;
+
+                    // THE HTML HAS BEEN UPDATED HERE (Removed the <a> wrapper on the header)
                     card.innerHTML = `
-                        <a href="clinic_profile.html?id=${dbClinic.clinic_id}" class="clickable-card-header" style="text-decoration: none; color: inherit; display: block; cursor: pointer;">
-                            <div class="card-header">
-                                <div class="clinic-logo-placeholder">
-                                    <img src="hospital.png" alt="Hospital Icon" class="clinic-icon">
-                                </div>
-                                <div class="clinic-title-area">
-                                    <h3>${dbClinic.clinic_name}</h3>
-                                    <p class="clinic-location" style="margin-bottom: 4px;">
-                                        <img src="location.png" alt="Location" class="loc-icon"> ${locationText}
-                                    </p>
-                                    <p class="clinic-location" style="margin-bottom: 0;">
-                                        <img src="call.png" alt="Contact" class="loc-icon" style="width: 14px; margin-right: 5px;"> ${formattedContact}
-                                    </p>
-                                </div>
+                        <div class="card-header clickable-card-header" style="cursor: pointer; transition: background-color 0.2s;" title="Click to locate on map">
+                            <div class="clinic-logo-placeholder">
+                                <img src="hospital.png" alt="Hospital Icon" class="clinic-icon">
                             </div>
-                        </a>
+                            <div class="clinic-title-area">
+                                <h3 class="interactive-title">${dbClinic.clinic_name}</h3>
+                                <p class="clinic-location" style="margin-bottom: 4px;">
+                                    <img src="location.png" alt="Location" class="loc-icon"> ${locationText}
+                                </p>
+                                <p class="clinic-location" style="margin-bottom: 0;">
+                                    <img src="call.png" alt="Contact" class="loc-icon" style="width: 14px; margin-right: 5px;"> ${formattedContact}
+                                </p>
+                            </div>
+                        </div>
                         
                         <div class="card-tags">
                             <span class="tag status-open">● Open Now</span>
-                            </div>
+                        </div>
                         
                         <div class="card-actions">
                             <a href="../appointment/appointment.html?clinic=${dbClinic.clinic_id}" class="btn primary-btn">Book Now</a>
-                            <button class="btn secondary-btn" onclick="window.open('https://waze.com/ul', '_blank')">
+                            <button class="btn secondary-btn" onclick="window.open('${wazeDeepLink}', '_blank')">
                                 <img src="directions.png" alt="Direction" class="btn-icon"> Map Directions
                             </button>
                         </div>
                     `;
                     
                     container.prepend(card);
+
+                    // --- TWO-WAY BINDING LOGIC HAS BEEN INJECTED HERE ---
+                    if (dbClinic.latitude && dbClinic.longitude) {
+                        // 1. Drop a pin on the map
+                        const marker = L.marker([dbClinic.latitude, dbClinic.longitude]).addTo(map);
+                        marker.bindPopup(`<b>${dbClinic.clinic_name}</b><br>${locationText}`);
+                        
+                        // 2. Map Pin -> Clicks -> Highlights Card
+                        marker.on('click', () => {
+                            highlightCard(card);
+                        });
+                        markers.push(marker);
+
+                        // 3. Card -> Clicks -> Moves Map
+                        const headerElement = card.querySelector('.clickable-card-header');
+                        if (headerElement) {
+                            headerElement.addEventListener('click', () => {
+                                map.flyTo([dbClinic.latitude, dbClinic.longitude], 17, {
+                                    animate: true,
+                                    duration: 1.5
+                                });
+                                marker.openPopup();
+                                document.getElementById('clinic-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            });
+                        }
+                    } else {
+                        // Fallback if no exact coordinates exist
+                        const headerElement = card.querySelector('.clickable-card-header');
+                        if (headerElement) {
+                            headerElement.addEventListener('click', () => {
+                                alert('Precise map coordinates not available for this clinic yet. Click Map Directions to search via Waze.');
+                            });
+                        }
+                    }
                 });
 
                 filterClinics(); 

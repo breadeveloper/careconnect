@@ -300,3 +300,23 @@ nav ul li a:hover {
     height: auto;
     margin-right: 6px;
 }
+
+/* --- LEAFLET MAP STYLING --- */
+.clinic-map-container {
+    height: 400px;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    z-index: 1; /* Keeps it strictly underneath your absolute header */
+    border: 1px solid #eee;
+}
+
+/* Interactive Card Header Hover Effect */
+.clickable-card-header:hover {
+    background-color: #f8f9fa; /* Very light gray to show it's a button */
+}
+.clickable-card-header:hover .interactive-title {
+    color: #007bff; /* Turns the clinic name blue on hover */
+    transition: color 0.2s ease;
+}

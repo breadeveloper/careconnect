@@ -17,6 +17,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $barangay = $_POST['clinic_barangay'];
     $street = $_POST['clinic_street'];
     
+    // Coordinates (Using ternary operators to safely insert null if left blank)
+    $latitude = !empty($_POST['clinic_latitude']) ? $_POST['clinic_latitude'] : null;
+    $longitude = !empty($_POST['clinic_longitude']) ? $_POST['clinic_longitude'] : null;
+    
     // Scheduling metadata
     $scheduleType = $_POST['schedule_type'];
 
@@ -32,9 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->begin_transaction();
 
     try {
-        // 3. Insert core profile into 'clinics' table
-        $stmt = $conn->prepare("INSERT INTO clinics (clinic_email, password_hash, clinic_name, clinic_contact, barangay, street, schedule_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $email, $hashedPassword, $clinicName, $contact, $barangay, $street, $scheduleType);
+        // 3. Insert core profile into 'clinics' table (NOW INCLUDES LAT/LNG!)
+        $stmt = $conn->prepare("INSERT INTO clinics (clinic_email, password_hash, clinic_name, clinic_contact, barangay, street, latitude, longitude, schedule_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        // "sssssssss" means 9 strings/decimals are being passed
+        $stmt->bind_param("sssssssss", $email, $hashedPassword, $clinicName, $contact, $barangay, $street, $latitude, $longitude, $scheduleType);
         $stmt->execute();
         
         $clinicId = $conn->insert_id; // Grab the newly created clinic's ID
