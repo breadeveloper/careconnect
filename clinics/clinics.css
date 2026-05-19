@@ -1,0 +1,302 @@
+/* =========================================
+   1. CORE TYPOGRAPHY & BODY SETUP
+========================================= */
+@font-face {
+    font-family: 'CodecCold';
+    /* Using ../ to point to the font file in your home folder! */
+    src: url(Codec-Cold-Regular-trial.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden; 
+}
+
+body {
+    font-family: 'CodecCold', Arial, sans-serif;
+    background-color: #ffffff;
+    margin: 0;
+    padding-top: 200px; 
+    overflow-x: hidden; 
+}
+
+/* =========================================
+   2. HEADER & NAVIGATION
+========================================= */
+header {
+    display: flex;
+    /* Pointing to the nav background in the registration folder */
+    background: url('navabout.png') no-repeat center;
+    background-size: cover; 
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 50px; 
+    background-color: rgba(255, 255, 255, 0.0); 
+    position: absolute; 
+    height: 80px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    backdrop-filter: blur(0px);
+}
+
+.logo-img {
+    width: 220px;  
+    height: auto;
+}
+
+.logo a {
+    text-decoration: none; 
+    color: inherit; 
+    display: block; 
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    margin-right: 70px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    font-family: 'CodecCold', Arial, sans-serif; 
+    text-decoration: none;
+    background-color: #a9c8fc;
+    padding: 10px 0;
+    border-radius: 20px;
+    color: #283039;
+    font-weight: bold;
+    width: 160px;
+    display: inline-block;
+    text-align: center;
+    font-size: 16px; /* Keeps the size uniform */
+}
+
+nav ul li a:hover {
+    background-color: #445779;
+    color: #ffffff;
+    transition: 0.3s ease-in-out;
+}
+
+/* =========================================
+   3. CLINICS DIRECTORY DASHBOARD
+========================================= */
+.directory-container {
+    max-width: 1200px;
+    margin: 0 auto 50px auto;
+    padding: 0 20px;
+}
+
+/* Search & Filter Bar */
+.directory-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 20px 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.search-box { flex: 1; }
+
+.search-box input {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.filter-group {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-group select {
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    color: #444;
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+}
+
+/* Clinics Grid */
+.clinics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+/* The Clinic Card */
+.clinic-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clinic-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.clinic-logo-placeholder {
+    width: 60px;
+    height: 60px;
+    background-color: #eef7ff;
+    border: 1px solid #a9c8fc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.clinic-title-area h3 {
+    color: #333;
+    font-size: 1.4rem;
+    margin: 0 0 5px 0;
+}
+
+.clinic-location {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+/* Tags */
+.card-tags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    overflow: hidden; /* Clips anything trying to escape the card */
+    align-items: center; /* Keeps tags vertically centered */
+}
+
+.tag {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    white-space: nowrap; /* Forces text to stay on one line */
+    
+    /* THE SMART SQUISH RULE */
+    max-width: 120px; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+/* Protects the Status tag and the '...' tag from EVER being squished */
+.status-open, .status-closed, .tag-more {
+    flex-shrink: 0;
+}
+
+.status-open { background: #dcfce7; color: #166534; }
+.status-closed { background: #fee2e2; color: #991b1b; }
+.specialty { background: #f8f9fa; color: #444; border: 1px solid #ccc;}
+
+/* Actions */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto; 
+}
+
+.btn {
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    font-family: Arial, sans-serif;
+    border: none;
+}
+
+.primary-btn {
+    background: #007bff;
+    color: #ffffff;
+}
+
+.primary-btn:hover { background: #0056b3; }
+
+.secondary-btn {
+    background: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
+    display: flex;             /* ADD THIS */
+    align-items: center;       /* ADD THIS */
+    justify-content: center;   /* ADD THIS */
+}
+
+.secondary-btn:hover {
+    background: #eef7ff;
+}
+
+/* --- CUSTOM ICON STYLING --- */
+
+/* The main hospital logo inside the blue box */
+.clinic-icon {
+    width: 32px; /* Adjust this if the hospital icon looks too big/small */
+    height: auto;
+    object-fit: contain;
+}
+
+/* The small location icon next to the address */
+.loc-icon {
+    width: 14px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 4px;
+    margin-bottom: 2px; /* Optically centers it with the text */
+}
+
+/* The location icon inside the map button */
+.btn-icon {
+    width: 16px;
+    height: auto;
+    margin-right: 6px;
+}
