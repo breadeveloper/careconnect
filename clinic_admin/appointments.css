@@ -1,0 +1,161 @@
+@font-face {
+    font-family: 'CodecCold';
+    src: url('../home/Codec-Cold-Regular-trial.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    overflow-x: hidden; 
+}
+
+body {
+    font-family: 'CodecCold', Arial, sans-serif;
+    color: #333;
+    padding-top: 130px; 
+}
+
+input, select, textarea, button, table {
+    font-family: 'Nunito Sans', Arial, sans-serif !important;
+}
+
+/* --- HEADER --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 50px; 
+    background-color: #5d99d9; 
+    position: absolute; 
+    height: 80px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.logo-img { width: 220px; height: auto; }
+nav { display: flex; align-items: center; margin-right: 70px; }
+nav ul { list-style: none; display: flex; gap: 15px; padding: 0; margin: 0; }
+nav ul li a {
+    text-decoration: none;
+    background-color: #a9c8fc;
+    padding: 10px 0;
+    border-radius: 20px;
+    color: #283039;
+    font-weight: bold;
+    width: 160px;
+    display: inline-block;
+    text-align: center;
+    transition: 0.3s;
+}
+nav ul li a:hover { background-color: #445779; color: #ffffff; }
+
+/* --- DASHBOARD LAYOUT --- */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto 50px auto;
+    padding: 0 20px;
+}
+.dashboard-header h2 { color: #007bff; font-size: 32px; margin-bottom: 5px; }
+.dashboard-header p { color: #666; margin-bottom: 20px; }
+
+.dashboard-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+.dashboard-controls input, .dashboard-controls select {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+    outline: none;
+}
+.dashboard-controls input { flex-grow: 1; }
+.dashboard-controls input:focus, .dashboard-controls select:focus { border-color: #007bff; }
+
+/* --- TABLE --- */
+.table-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+.appointment-table { width: 100%; border-collapse: collapse; }
+.appointment-table th, .appointment-table td { padding: 15px 20px; text-align: left; border-bottom: 1px solid #eee; }
+.appointment-table th { background-color: #f1f5f9; color: #445779; font-weight: bold; text-transform: uppercase; font-size: 13px; letter-spacing: 0.5px; }
+.appointment-table tbody tr:hover { background-color: #fdfdfd; }
+.loading-text { text-align: center; padding: 30px !important; color: #666; font-style: italic; }
+
+.patient-info strong { display: block; font-size: 16px; color: #222; }
+.patient-info span { display: block; font-size: 13px; color: #777; margin-top: 3px; }
+
+/* --- BADGES & BUTTONS --- */
+.status-badge { padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block; }
+.status-pending { background-color: #fff3cd; color: #856404; }
+.status-confirmed { background-color: #d4edda; color: #155724; }
+.status-cancelled { background-color: #f8d7da; color: #721c24; }
+.btn-delete { background-color: transparent; color: #666; border: 1px solid #ccc; font-size: 14px; padding: 5px 10px; display: inline-flex; align-items: center; justify-content: center; }
+.btn-delete:hover { background-color: #dc3545; color: white; border-color: #dc3545; }
+
+.action-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-sm { padding: 6px 12px; border: none; border-radius: 5px; font-size: 13px; font-weight: bold; cursor: pointer; transition: 0.2s; color: #fff; }
+.btn-approve { background-color: #28a745; }
+.btn-approve:hover { background-color: #218838; }
+.btn-reject { background-color: #dc3545; }
+.btn-reject:hover { background-color: #c82333; }
+.btn-move { background-color: #6c757d; }
+.btn-move:hover { background-color: #5a6268; }
+
+/* --- MODAL --- */
+.hidden { display: none !important; }
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(3px); }
+.modal-content { background: #fff; padding: 25px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-header h3 { margin: 0; color: #007bff; }
+.close-modal { font-size: 24px; cursor: pointer; color: #666; }
+.close-modal:hover { color: #dc3545; }
+.input-group { margin-bottom: 15px; display: flex; flex-direction: column; }
+.input-group label { margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+.input-group input { padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+.btn-primary { background-color: #007bff; color: white; padding: 10px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+.full-width { width: 100%; }
+
+/* --- BULK ACTION TOOLBAR --- */
+.dashboard-controls {
+    align-items: center; /* Vertically aligns search, filter, and buttons */
+    flex-wrap: wrap; /* Keeps it responsive on smaller screens */
+}
+
+.bulk-actions {
+    display: flex;
+    gap: 10px;
+    border-left: 2px solid #eee;
+    padding-left: 15px;
+    margin-left: 5px;
+}
+
+/* Visually disable buttons when no rows are checked */
+.bulk-actions button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    filter: grayscale(100%);
+}
+
+/* Center the checkboxes in the table */
+.appointment-table td input[type="checkbox"], 
+.appointment-table th input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}

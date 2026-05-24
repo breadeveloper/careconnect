@@ -1,0 +1,148 @@
+@font-face {
+    font-family: 'CodecCold';
+    src: url('../home/Codec-Cold-Regular-trial.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    overflow-x: hidden; 
+}
+
+body {
+    font-family: 'CodecCold', Arial, sans-serif;
+    color: #333;
+    padding-top: 130px; 
+}
+
+input, select, textarea, button {
+    font-family: 'Nunito Sans', Arial, sans-serif !important;
+}
+
+/* --- HEADER --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 50px; 
+    background-color: #5d99d9; 
+    position: absolute; 
+    height: 80px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.logo-img { width: 220px; height: auto; }
+nav { display: flex; align-items: center; margin-right: 70px; }
+nav ul { list-style: none; display: flex; gap: 15px; padding: 0; margin: 0; }
+nav ul li a {
+    text-decoration: none;
+    background-color: #a9c8fc;
+    padding: 10px 0;
+    border-radius: 20px;
+    color: #283039;
+    font-weight: bold;
+    width: 160px;
+    display: inline-block;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+nav ul li a:hover { background-color: #445779; color: #ffffff; }
+
+/* --- PROFILE UI --- */
+.profile-container {
+    max-width: 900px;
+    margin: 0 auto 50px auto;
+    padding: 0 20px;
+}
+.profile-header h2 { color: #007bff; font-size: 32px; margin-bottom: 5px; }
+.profile-card { 
+    background: #fff; 
+    padding: 0 0 30px 0; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+    margin-top: 20px; 
+    border-top: 4px solid #007bff;
+    overflow: hidden; 
+}
+
+#profile-form { padding: 0 40px; }
+.form-section { margin-bottom: 40px; }
+.form-section h3 { color: #445779; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 10px; }
+.section-desc { font-size: 14px; color: #666; margin-bottom: 20px; }
+
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.input-group { display: flex; flex-direction: column; }
+.full-width { grid-column: 1 / -1; }
+.input-group label { margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #666; }
+.input-group input { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; transition: 0.3s; }
+.input-group input:not([readonly]):focus { outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); }
+
+/* --- CHECKBOX GRID (For Schedule) --- */
+.checkbox-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; margin-top: 10px; }
+.checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer; }
+.checkbox-item input { width: 18px; height: 18px; cursor: pointer; }
+
+/* --- BUTTONS --- */
+.form-actions { display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px; border-top: 1px solid #eee; padding-top: 25px; }
+.form-actions button { padding: 12px 30px; border: none; border-radius: 20px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.btn-primary { background-color: #007bff; color: white; }
+.btn-primary:hover { background-color: #0056b3; }
+.btn-save { background-color: #28a745; color: white; }
+.btn-save:hover { background-color: #218838; }
+.btn-cancel { background-color: #f8f9fa; color: #333; border: 1px solid #ccc !important; }
+.btn-cancel:hover { background-color: #e2e6ea; }
+.hidden { display: none !important; }
+
+/* --- VIEW MODE LOGIC (The Hardware Lock) --- */
+.always-locked { background-color: #e9ecef !important; color: #666 !important; cursor: not-allowed !important; border: 1px solid #ddd !important; }
+.view-mode .editable-field[type="text"], 
+.view-mode .editable-field[type="time"] { border-color: transparent; background-color: transparent; padding-left: 0; pointer-events: none; }
+.view-mode input[type="checkbox"], .view-mode .checkbox-item { pointer-events: none; opacity: 0.7; cursor: not-allowed; }
+
+/* --- CUSTOM SCHEDULE GRID --- */
+.custom-day-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 12px;
+    padding: 12px 15px;
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+/* Force the checkbox label to have a fixed width so the time inputs align perfectly */
+.custom-day-row .checkbox-item {
+    width: 130px; 
+    margin: 0;
+}
+
+.custom-day-row .time-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.custom-day-row input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Make disabled time inputs look visibly locked out */
+.custom-time:disabled {
+    background-color: #e9ecef;
+    color: #999;
+    cursor: not-allowed;
+    border-color: #ddd;
+}

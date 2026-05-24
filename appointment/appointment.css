@@ -15,15 +15,13 @@ body {
     font-family: 'CodecCold', Arial, sans-serif;
     background-color: #f8f9fa;
     margin: 0;
-    padding-top: 150px; /* Gives the dashboard space below the absolute header */
+    padding-top: 150px; 
 }
 
-/* THE QUARANTINE: Force standard fonts ONLY on dashboard elements so numbers work */
 .dashboard-container, .modal, input, select, textarea, button, .fc {
     font-family: 'Nunito Sans', Arial, sans-serif !important;
 }
 
-/* SCOPED RESET: Only apply border-box to the dashboard to protect the Header's native sizing */
 .dashboard-container *, .modal * {
     box-sizing: border-box;
 }
@@ -101,6 +99,46 @@ nav ul li a:hover {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    position: relative; 
+}
+
+/* --- 5. GUEST LOCKDOWN OVERLAY --- */
+#guest-overlay {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px); 
+    z-index: 500; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.guest-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    text-align: center;
+    max-width: 420px;
+    border: 2px solid #a9c8fc;
+}
+
+.guest-card h2 {
+    color: #dc3545; 
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.guest-card p {
+    color: #445779;
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.5;
 }
 
 /* Calendar Card */
@@ -114,7 +152,7 @@ nav ul li a:hover {
     min-height: 650px; 
 }
 
-/* Dashboard Controls (Middle Bar) */
+/* Dashboard Controls */
 .dashboard-controls {
     display: flex;
     justify-content: space-between;
@@ -148,6 +186,7 @@ nav ul li a:hover {
 .primary-btn:hover { background-color: #0056b3; }
 .danger-btn { background-color: #dc3545; color: white; }
 .success-btn { background-color: #28a745; color: white; }
+.success-btn:hover { background-color: #218838; }
 .full-width { width: 100%; margin-top: 15px; }
 
 /* Table Section */
@@ -174,7 +213,7 @@ nav ul li a:hover {
     background-color: #fdfdfd;
 }
 
-/* --- 4. FLOATING BOOKING MODAL --- */
+/* --- 4. FLOATING MODALS --- */
 .modal {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -217,14 +256,81 @@ nav ul li a:hover {
 
 .form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
 .form-group label { margin-bottom: 5px; font-weight: bold; color: #445779;}
-.form-group input, .form-group select {
+
+.form-group input, .form-group select, .form-group textarea {
     padding: 12px; 
     border: 1px solid #ccc; 
     border-radius: 5px;
     transition: 0.3s;
 }
-.form-group input:focus, .form-group select:focus {
+.form-group textarea { resize: none; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* --- FULLCALENDAR OVERRIDES --- */
+.fc .fc-daygrid-day.fc-day-today {
+    background-color: transparent !important;
+}
+
+/* --- TESTIMONIAL FEEDBOARD --- */
+.testimonials-section-card {
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.testimonials-section-card .section-title {
+    margin-top: 0;
+    color: #445779;
+    font-size: 20px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.testimonial-card {
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+    padding: 15px 20px;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.testimonial-stars {
+    color: #ffc107;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.testimonial-text {
+    font-style: italic;
+    color: #4a5568;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+}
+
+.testimonial-meta {
+    font-size: 13px;
+    color: #718096;
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.loading-text {
+    text-align: center;
+    color: #718096;
+    padding: 20px;
+    grid-column: 1 / -1;
 }

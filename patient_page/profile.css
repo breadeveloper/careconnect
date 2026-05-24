@@ -1,0 +1,199 @@
+/* --- 1. FONTS & BUG FIXES --- */
+@font-face {
+    font-family: 'CodecCold';
+    src: url('Codec-Cold-Regular-trial.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    box-sizing: border-box; 
+}
+
+html, body {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    /* THE FIX: Permanently kills the horizontal scrollbar */
+    overflow-x: hidden; 
+}
+
+body {
+    font-family: 'CodecCold', Arial, sans-serif;
+    color: #333;
+    padding-top: 130px; 
+}
+
+input, select, textarea, button {
+    font-family: 'Nunito Sans', Arial, sans-serif !important;
+}
+
+/* --- 2. PROFILE SPECIFIC HEADER --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 50px; 
+    background-color: #5d99d9; 
+    position: absolute; 
+    height: 80px;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.logo-img { width: 220px; height: auto; }
+nav { display: flex; align-items: center; margin-right: 70px; }
+nav ul { list-style: none; display: flex; gap: 15px; padding: 0; margin: 0; }
+nav ul li a {
+    text-decoration: none;
+    background-color: #a9c8fc;
+    padding: 10px 0;
+    border-radius: 20px;
+    color: #283039;
+    font-weight: bold;
+    width: 160px;
+    display: inline-block;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+nav ul li a:hover { background-color: #445779; color: #ffffff; }
+
+/* --- 3. PROFILE UI LAYOUT --- */
+.profile-container {
+    max-width: 900px;
+    margin: 0 auto 50px auto;
+    padding: 0 20px;
+}
+.profile-header h2 { color: #007bff; font-size: 32px; margin-bottom: 5px; }
+.profile-card { background: #fff; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); margin-top: 20px; }
+.form-section { margin-bottom: 40px; }
+.form-section h3 { color: #445779; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+
+.input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.input-group { display: flex; flex-direction: column; }
+.full-width { grid-column: 1 / -1; }
+
+.input-group label { margin-bottom: 8px; font-weight: bold; font-size: 14px; color: #666; }
+.input-group input, .input-group select { padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; transition: 0.3s; }
+
+input[readonly] { background-color: #e9ecef; color: #666; cursor: not-allowed; border: 1px solid #ddd; }
+.input-group input:not([readonly]):focus { outline: none; border-color: #007bff; box-shadow: 0 0 5px rgba(0, 123, 255, 0.3); }
+
+/* --- 4. MEDICAL HISTORY & DYNAMIC INPUTS --- */
+.hidden { display: none !important; }
+
+.main-toggle {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #007bff;
+    background: #f1f7fd;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #cce5ff;
+}
+.main-toggle input { margin-right: 15px; width: 18px; height: 18px; cursor: pointer; }
+
+.medical-details {
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-top: 15px;
+    background: #fafafa;
+}
+
+.medical-controls { display: flex; gap: 15px; margin-bottom: 20px; }
+.medical-controls input, .medical-controls select { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+
+.medical-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+.med-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 15px; }
+.med-option input { width: 16px; height: 16px; cursor: pointer; }
+
+/* Dynamic Other Rows */
+.other-input-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.other-med-input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.remove-med-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+.remove-med-btn:hover { background: #c82333; }
+.secondary-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 5px;
+}
+.secondary-btn:hover { background: #5a6268; }
+
+/* --- 5. FORM ACTIONS --- */
+.form-actions { display: flex; gap: 15px; justify-content: flex-end; margin-top: 20px; border-top: 1px solid #eee; padding-top: 25px; }
+.form-actions button { padding: 12px 30px; border: none; border-radius: 20px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.btn-save { background-color: #28a745; color: white; }
+.btn-save:hover { background-color: #218838; }
+.btn-cancel { background-color: #f8f9fa; color: #333; border: 1px solid #ccc !important; }
+.btn-cancel:hover { background-color: #e2e6ea; }
+
+/* --- 6. VIEW MODE STYLING (The "Magic" Trick) --- */
+
+/* Grays out checkboxes AND their labels, stopping text-clicks from bypassing the lock */
+.view-mode input[type="checkbox"],
+.view-mode .main-toggle,
+.view-mode .med-option {
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Grays out checkboxes so they look inactive but readable */
+.view-mode input[type="checkbox"] {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Hides all the editing tools (Search bar, Add Button, Remove '✕' buttons) */
+.view-mode .hide-in-view, 
+.view-mode .remove-med-btn {
+    display: none !important;
+}
+
+/* Primary Edit Button Styling */
+.btn-primary { 
+    background-color: #007bff; 
+    color: white; 
+}
+.btn-primary:hover { 
+    background-color: #0056b3; 
+}
+
+/* Makes sure locked fields ALWAYS look locked, even in edit mode */
+.always-locked { 
+    background-color: #e9ecef !important; 
+    color: #666 !important; 
+    cursor: not-allowed !important; 
+    border: 1px solid #ddd !important; 
+}

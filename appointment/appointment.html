@@ -6,9 +6,19 @@
     <title>CareConnect - Appointments</title>
     <link rel="stylesheet" href="appointment.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght=0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
     
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // ⚠️ IMPORTANT: Replace "YOUR_PUBLIC_KEY" with your actual Public Key from EmailJS Account Dashboard
+          emailjs.init({
+            publicKey: "5DYHcs3S5OjcU0DQF",
+          });
+       })();
+    </script>
 </head>
 <body>
     <header>
@@ -19,7 +29,7 @@
         </div>
         <nav>
             <ul>
-                <li><a href="../registration/registration.html">Login</a></li>
+                <li><a href="../registration/registration.html" id="login-nav-link">Login</a></li>
                 <li><a href="../clinics/clinics.html">Clinics</a></li>
                 <li><a href="../appointment/appointment.html">Appointment</a></li>
                 <li><a href="../about/about.html">About Us</a></li>
@@ -28,6 +38,14 @@
     </header>
     <main class="dashboard-container">
         
+        <div id="guest-overlay" class="hidden">
+            <div class="guest-card">
+                <h2>🔒 Access Restricted</h2>
+                <p>You must be logged in as a patient to view schedules or book an appointment.</p>
+                <button onclick="window.location.href='../registration/registration.html'" class="btn primary-btn">Go to Login</button>
+            </div>
+        </div>
+
         <div class="calendar-card">
             <div id="calendar"></div>
         </div>
@@ -43,12 +61,9 @@
                 </select>
             </div>
             
-            <div class="action-group">
-                <div id="clinic-bulk-actions" class="hidden">
-                    <button class="btn success-btn" id="bulk-approve">Approve</button>
-                    <button class="btn danger-btn" id="bulk-cancel">Cancel</button>
-                </div>
-                
+            <div class="action-group" style="display: flex; gap: 10px; align-items: center;">
+                <button id="bulk-cancel-btn" class="btn danger-btn" disabled>Cancel Selected</button>
+                <button id="give-feedback-btn" class="btn success-btn">⭐ Leave Feedback</button>
                 <button id="new-appointment-btn" class="btn primary-btn">+ New Appointment</button>
             </div>
         </div>
@@ -57,20 +72,28 @@
             <table class="appointment-table">
                 <thead>
                     <tr>
-                        <th class="checkbox-col hidden"><input type="checkbox" id="select-all"></th>
+                        <th style="width: 40px; text-align: center;">
+                            <input type="checkbox" id="select-all" title="Select All">
+                        </th>
                         <th>Date & Time</th>
                         <th>Clinic Name</th>
                         <th>Reason</th>
                         <th>Status</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="appointment-table-body">
                     <tr>
-                        <td colspan="6" style="text-align: center; padding: 20px;">Loading appointments...</td>
+                        <td colspan="5" style="text-align: center; padding: 20px;">Loading appointments...</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="table-card" style="margin-top: 20px; padding: 20px;">
+            <h2 style="color: #445779; font-size: 20px; margin-top: 0;">💬 Patient Testimonials</h2>
+            <div id="testimonials-container">
+                <p style="color: #666; font-style: italic;">No testimonies loaded yet.</p>
+            </div>
         </div>
     </main>
 
@@ -85,7 +108,7 @@
                     <label>Select Clinic</label>
                     <select id="modal-clinic-select" required>
                         <option value="">Choose a clinic...</option>
-                        </select>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Reason for Visit</label>
@@ -93,17 +116,65 @@
                 </div>
                 <div class="form-group">
                     <label>Preferred Date</label>
-                    <input type="date" id="modal-date" required>
+                    <input type="date" id="modal-date" min="" required>
                 </div>
+                
                 <div class="form-group">
-                    <label>Preferred Time</label>
-                    <input type="time" id="modal-time" required>
+                    <label>Appointment Duration</label>
+                    <select id="modal-duration" required>
+                        <option value="">Select duration...</option>
+                        <option value="15">15 Minutes</option>
+                        <option value="30">30 Minutes</option>
+                        <option value="60">1 Hour</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Available Times</label>
+                    <select id="modal-time" required disabled>
+                        <option value="">Select a clinic, date, and duration first...</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn primary-btn full-width">Submit Request</button>
             </form>
         </div>
     </div>
 
+    <div id="feedback-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Share Your Experience</h2>
+                <span class="close-feedback-modal close-modal" style="font-size: 28px; cursor: pointer; color: #666;">&times;</span>
+            </div>
+            <form id="feedback-form">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="feedback-name" placeholder="e.g., Jane Doe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Rating</label>
+                    <select id="feedback-rating" required>
+                        <option value="">Select rating...</option>
+                        <option value="5">⭐⭐⭐⭐⭐ (Excellent)</option>
+                        <option value="4">⭐⭐⭐⭐ (Good)</option>
+                        <option value="3">⭐⭐⭐ (Average)</option>
+                        <option value="2">⭐⭐ (Fair)</option>
+                        <option value="1">⭐ (Poor)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Your Testimony / Comments</label>
+                    <textarea id="feedback-comments" rows="4" style="padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit;" placeholder="How was your experience with CareConnect?" required></textarea>
+                </div>
+
+                <button type="submit" class="btn success-btn full-width">Submit Testimony</button>
+            </form>
+        </div>
+    </div>
+
     <script src="appointment.js"></script>
+    <script src="../home/auth.js"></script>
 </body>
 </html>
