@@ -1,9 +1,9 @@
 <?php
-// Default XAMPP database credentials
-$servername = "localhost";
-$username = "root";
-$password = ""; 
-$dbname = "careconnect_db";
+// infinityfree database connection details
+$servername = "sql213.infinityfree.com";
+$username = "if0_42006534";
+$password = "SXPrVFawIVcuqC"; 
+$dbname = "if0_42006534_careconnect_db";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
